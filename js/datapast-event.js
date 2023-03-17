@@ -206,7 +206,7 @@ function Cards (data) {
         <p class="card-text"> Date ${data[i].date}</p>
         <p class="card-text"> Place: ${data[i].place}</p>
         <div class="d-flex justify-content-between"> <p> Price $ ${data[i].price}</p>
-            <a href="./detail.html" class="btn">See more...</a>
+            <a href="./detail.html?id=${data[i]._id}" class="btn">See more...</a>
           </div>
         </div>
       </div>
@@ -216,3 +216,65 @@ function Cards (data) {
 }
 
 Cards (PastEvent);
+
+let mapEvents = data.map(lista => lista.category);
+const dataA = new Set(mapEvents);
+let dataArrayFiltrado = [...dataA];
+
+
+function printChecks(id_etiqueta, array_tipe) {
+  let container = document.querySelector(id_etiqueta)
+  array_tipe = array_tipe.map(each => {
+    return `
+    <div class="d-flex p-3 ms-5 gap-5"> 
+    <fieldset>
+    <input onclick="captureData()" class="form-check-input class_checks"  type="checkbox" id="${each}" role="switch" value="${each}">
+    <label class="form-check-label" for="${each}">${each}</label>
+    </fieldset>
+    </div>
+    `
+  })
+
+  array_tipe.push(`<div class="container-fluid justify-content-end">
+    <input  oninput="captureData()" id="id_search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+   </div>
+  `)
+  container.innerHTML = array_tipe.join('')
+}
+
+
+printChecks('#table_checks', dataArrayFiltrado)
+
+
+function captureData() {
+  let text = document.getElementById('id_search').value.toLowerCase()
+  let checks = Array.from(document.querySelectorAll('.class_checks:checked')).map(each => each.value)
+  let filterPastEvent = PastEvent.filter(each => {
+    return (
+      each.name.toLowerCase().includes(text)
+    ) && (
+        (checks.length === 0 || checks.includes(each.category))
+      )
+  })
+  if (filterPastEvent.length > 0) {
+    Cards(filterPastEvent)
+  }
+  else {
+    notFound()
+
+  }
+}
+
+function notFound() {
+  let notFoundCard = document.getElementById("div-cardspast")
+  notFoundCard.innerHTML = `
+                    <div class="d-flex justify-content-center flex-wrap text-center">
+                    <div class="card m-2 shadow" style="width: 30rem">
+                    <div class="card-body ">
+                      <h5 class="card-title"> Event not Found</h5>
+                      <p class="card-text">Please try again</p>                
+                  </div>                  
+              </div>
+          </div>
+        `
+}
