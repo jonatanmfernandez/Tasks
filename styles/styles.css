@@ -3,6 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+
     
 }
 
@@ -64,7 +65,8 @@ thead {
     color: white;
 }
 
-table {
+table  {
+    border: solid black;
     border-color:1px solid #050505;
 }
 
@@ -84,4 +86,13 @@ img {
 .iconodewsp {
     width: 3%;
     margin-left: 0.5%;
+}
+
+th, td {
+    border: 1px solid #F2055C;
+    padding: 10px;
+  }
+
+td {
+  text-align: center;
 }
